@@ -152,6 +152,7 @@ int main(int argc, char **argv) {
       case 'r': rbb_port = atoi(optarg);    break;
       case 'V': verbose = true;             break;
       case 'p': perf = true;                break;
+      case 'D': break;
 #if VM_TRACE
       case 'v': {
         vcdfile = strcmp(optarg, "-") == 0 ? stdout : fopen(optarg, "w");
@@ -177,6 +178,12 @@ int main(int argc, char **argv) {
           c = 'm';
           optarg = optarg+12;
         }
+#ifdef DROMAJO
+        else if (arg.substr(0, 12) == "+checkpoint=") {
+          c = 'D';
+          optarg = optarg+12;
+        }
+#endif
 #if VM_TRACE
         else if (arg.substr(0, 12) == "+dump-start=") {
           c = 'x';

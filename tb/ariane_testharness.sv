@@ -319,12 +319,21 @@ module ariane_testharness #(
     .data_i ( rom_rdata               )
   );
 
+`ifdef DROMAJO
+  dromajo_bootrom i_bootrom (
+    .clk_i      ( clk_i     ),
+    .req_i      ( rom_req   ),
+    .addr_i     ( rom_addr  ),
+    .rdata_o    ( rom_rdata )
+  );
+`else
   bootrom i_bootrom (
     .clk_i      ( clk_i     ),
     .req_i      ( rom_req   ),
     .addr_i     ( rom_addr  ),
     .rdata_o    ( rom_rdata )
   );
+`endif
 
   // ------------------------------
   // Memory + Exclusive Access
