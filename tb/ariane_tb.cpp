@@ -242,11 +242,14 @@ int main(int argc, char **argv) {
   }
 
 done_processing:
+// allow proceeding without a binary if DROMAJO set
+#ifndef DROMAJO
   if (optind == argc) {
     std::cerr << "No binary specified for emulator\n";
     usage(argv[0]);
     return 1;
   }
+#endif
   int htif_argc = 1 + argc - optind;
   htif_argv = (char **) malloc((htif_argc) * sizeof (char *));
   htif_argv[0] = argv[0];
