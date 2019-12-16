@@ -21,6 +21,7 @@
 module sram #(
     parameter DATA_WIDTH = 64,
     parameter NUM_WORDS  = 1024,
+    parameter SIM_INIT   = 1,
     parameter OUT_REGS   = 0    // enables output registers in FPGA macro (read lat = 2)
 )(
    input  logic                          clk_i,
@@ -60,7 +61,7 @@ generate
           .OUT_REGS (0),
           // this initializes the memory with 0es. adjust to taste...
           // 0: no init, 1: zero init, 2: random init, 3: deadbeef init
-          .SIM_INIT (1)
+          .SIM_INIT (SIM_INIT)
         ) i_ram (
            .Clk_CI    ( clk_i                     ),
            .Rst_RBI   ( rst_ni                    ),

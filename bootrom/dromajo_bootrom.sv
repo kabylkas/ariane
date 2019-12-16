@@ -32,10 +32,11 @@ module dromajo_bootrom (
           $display("%d %h", address, value);
           mem[address] = value;
         end
-        $display("Done syncing RAM with dromajo...\n");
+        $display("Done syncing boot ROM with dromajo...\n");
       end else begin
-        $display("Dromajo error: provide path to a checkpoint.\n");
+        $display("Failed syncing boot ROM: provide path to a checkpoint.\n");
       end
+
     end
 
     logic [$clog2(RomSize)-1:0] addr_q;

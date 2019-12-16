@@ -17,7 +17,11 @@ module ariane_testharness #(
   parameter int unsigned AXI_USER_WIDTH    = 1,
   parameter int unsigned AXI_ADDRESS_WIDTH = 64,
   parameter int unsigned AXI_DATA_WIDTH    = 64,
+`ifdef DROMAJO
+  parameter bit          InclSimDTM        = 1'b0,
+`else
   parameter bit          InclSimDTM        = 1'b1,
+`endif
   parameter int unsigned NUM_WORDS         = 2**25,         // memory size
   parameter bit          StallRandomOutput = 1'b0,
   parameter bit          StallRandomInput  = 1'b0
@@ -523,6 +527,9 @@ module ariane_testharness #(
 
   sram #(
     .DATA_WIDTH ( AXI_DATA_WIDTH ),
+    `ifdef DROMAJO
+    .SIM_INIT(4),
+    `endif
     .NUM_WORDS  ( NUM_WORDS      )
   ) i_sram (
     .clk_i      ( clk_i                                                                       ),
