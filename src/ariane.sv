@@ -12,6 +12,14 @@
 // Date: 19.03.2017
 // Description: Ariane Top-level module
 
+`ifdef DROMAJO
+import "DPI-C" function void dromajo_step(int     hart_id,
+                                          longint pc,
+                                          int     insn,
+                                          longint wdata);
+import "DPI-C" function void init_dromajo();
+`endif
+
 import ariane_pkg::*;
 
 module ariane #(
@@ -752,6 +760,13 @@ module ariane #(
   int f;
   logic [63:0] cycles;
 
+`ifdef DROMAJO
+  initial begin
+    init_dromajo();
+    $display("Done initing dromajo...");
+  end
+`endif
+
   initial begin
     f = $fopen("trace_hart_00.dasm", "w");
   end
@@ -771,6 +786,13 @@ module ariane #(
       end
       for (int i = 0; i < NR_COMMIT_PORTS; i++) begin
         if (commit_ack[i] && !commit_instr_id_commit[i].ex.valid) begin
+`ifdef DROMAJO          
+          // COSIM with dromajo
+          dromajo_step(hart_id_i,
+                       commit_instr_id_commit[i].pc,
+                       commit_instr_id_commit[i].ex.tval[31:0],
+                       commit_instr_id_commit[i].result);
+`endif
           $fwrite(f, "%d 0x%0h %s (0x%h) DASM(%h)\n", cycles, commit_instr_id_commit[i].pc, mode, commit_instr_id_commit[i].ex.tval[31:0], commit_instr_id_commit[i].ex.tval[31:0]);
         end else if (commit_ack[i] && commit_instr_id_commit[i].ex.valid) begin
           if (commit_instr_id_commit[i].ex.cause == 2) begin
