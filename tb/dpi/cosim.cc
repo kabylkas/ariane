@@ -2,13 +2,14 @@
 #include <iostream>
 #include "dromajo_cosim.h"
 #include "stdlib.h"
+#include <string>
 
 dromajo_cosim_state_t* dromajo_pointer;
 uint64_t d_address = 0;
 uint64_t d_count = 0;
 
-extern "C" void init_dromajo() {
-  char *argv[] = {(char*)"Variane", (char*)"/soe/nkabylka/ariane/dromajo/snapshots/boot_dhrystone.cfg"};
+extern "C" void init_dromajo(char* cfg_f_name) {
+  char *argv[] = {(char*)"Variane", cfg_f_name};
 
   dromajo_pointer = dromajo_cosim_init(2, argv);
 }

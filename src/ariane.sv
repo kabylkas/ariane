@@ -17,7 +17,7 @@ import "DPI-C" function void dromajo_step(int     hart_id,
                                           longint pc,
                                           int     insn,
                                           longint wdata);
-import "DPI-C" function void init_dromajo();
+import "DPI-C" function void init_dromajo(string cfg_f_name);
 `endif
 
 import ariane_pkg::*;
@@ -762,8 +762,13 @@ module ariane #(
 
 `ifdef DROMAJO
   initial begin
-    init_dromajo();
-    $display("Done initing dromajo...");
+    string f_name;
+    if ($value$plusargs("checkpoint=%s", f_name)) begin
+      init_dromajo({f_name, ".cfg"});
+      $display("Done initing dromajo...");
+    end else begin
+      $display("Failed initing dromajo. Provide checkpoint name.");
+    end
   end
 `endif
 
